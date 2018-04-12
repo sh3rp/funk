@@ -37,6 +37,6 @@ func main() {
 		return
 	}
 
-	processor := funk.NewGeneratorEventProcessor(function.(func(funk.Event)))
+	processor := funk.NewGeneratorEventProcessor(function.(func(funk.Event) funk.ReturnValue))
 	fmt.Printf("ERROR: %v\n", processor.Process())
 }

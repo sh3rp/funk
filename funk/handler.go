@@ -1,6 +1,7 @@
 package funk
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -8,17 +9,17 @@ import (
 
 type EventProcessor interface {
 	Process() error
-	Handler() func(Event)
+	Handler() func(Event) ReturnValue
 }
 
-func NewGeneratorEventProcessor(handler func(Event)) EventProcessor {
+func NewGeneratorEventProcessor(handler func(Event) ReturnValue) EventProcessor {
 	return generatorEventProcessor{
 		handler: handler,
 	}
 }
 
 type generatorEventProcessor struct {
-	handler func(Event)
+	handler func(Event) ReturnValue
 }
 
 func (gep generatorEventProcessor) Process() error {
@@ -29,11 +30,12 @@ func (gep generatorEventProcessor) Process() error {
 			Src:       "local",
 			Data:      []byte{1, 2, 3, 4, 5},
 		}
-		gep.Handler()(evt)
+		result := gep.Handler()(evt)
+		fmt.Printf("Result: %v\n", result)
 		time.Sleep(1 * time.Second)
 	}
 }
 
-func (gep generatorEventProcessor) Handler() func(Event) {
+func (gep generatorEventProcessor) Handler() func(Event) ReturnValue {
 	return gep.handler
 }

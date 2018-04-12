@@ -9,3 +9,8 @@ message Event {
     repeated string tags = 4;
     bytes data = 5;
 }
+
+message ReturnValue {
+    repeated string tags = 1;
+    bytes data = 2;
+}
